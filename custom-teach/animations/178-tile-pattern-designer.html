@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tile Pattern Designer</title>
+    <style>
+:root {
+    /*
+    the block angle represent the vertex position of the triangle,
+    it has four values:
+    0 - the vertex at top-left
+    90 - the vertex at top-right
+    180 - the vertex at bottom-right
+    270 - the vertex at bottom-left
+    */
+    --block-angle-1: 0;
+    --block-angle-2: 0;
+    --block-angle-3: 0;
+    --block-angle-4: 0;
+}
+
+body {
+    margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.75em;
+    font-family: sans-serif;
+    background: linear-gradient(to right bottom, lightcyan, lightblue);
+}
+
+h1 {
+    font-weight: normal;
+    margin: 2em;
+    letter-spacing: 0.1em;
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+    width: 65em;
+}
+
+.sample {
+    width: 20em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sample > .tile {
+    margin-bottom: 4em;
+}
+
+.sample > .tile .block {
+    cursor: pointer;
+}
+
+.sample .pattern-list {
+    font-size: 0.2em;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5em;
+}
+
+.sample .pattern-list .tile {
+    cursor: pointer;
+}
+
+/* the color of default pattern is a lighter color */
+.sample .pattern-list .tile:first-child .block {
+    color: lightgrey;
+}
+
+.production {
+    width: 40em;
+}
+
+.production .floor {
+    --count-of-per-side: 2;
+    display: grid;
+    grid-template-columns: repeat(var(--count-of-per-side), 1fr);
+    font-size: calc(2em / var(--count-of-per-side));
+}
+
+.production .grid-list {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2em;
+}
+
+.production .grid-list button {
+    font-size: 1.5em;
+    width: 6em;
+    letter-spacing: 0.4em;
+    cursor: pointer;
+}
+
+.tile {
+    width: 20em;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.tile .block {
+    width: 10em;
+    height: 10em;
+    border: 1px solid grey;
+    box-sizing: border-box;
+    color: dimgray;
+    position: relative;
+    transition: 0.2s;
+}
+
+.tile .block::before {
+    content: '';
+    position: absolute;
+    border-width: calc(5em - 1px);
+    border-style: solid;
+    border-color: currentColor transparent transparent currentColor;
+}
+
+.tile .block:nth-child(1) {transform: rotate(calc(var(--block-angle-1) * 1deg));}
+.tile .block:nth-child(2) {transform: rotate(calc(var(--block-angle-2) * 1deg));}
+.tile .block:nth-child(3) {transform: rotate(calc(var(--block-angle-3) * 1deg));}
+.tile .block:nth-child(4) {transform: rotate(calc(var(--block-angle-4) * 1deg));}
+
+.sample > .tile,
+.production .floor {
+    box-shadow: 
+        0 0 0 9px lightcyan,
+        0 0 0 10px grey;
+}
+
+</style>
+</head>
+<body>
+    <h1>Tile Pattern Designer</h1>
+    <main>
+        <div class="sample">
+            <div class="tile">
+                <div class="block"></div>
+                <div class="block"></div>
+                <div class="block"></div>
+                <div class="block"></div>
+            </div>
+            <div class="pattern-list"></div>
+        </div>
+        <div class="production">
+            <div class="floor"></div>
+            <div class="grid-list">
+                <button>2x2</button>
+                <button>4x4</button>
+                <button>8x8</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+const $ = (selector) => document.querySelector(selector)
+let dom = {
+    root: document.documentElement,
+    sampleTile: $('.sample > .tile'),
+    patternList: $('.sample .pattern-list'),
+    gridList: $('.production .grid-list'),
+    floor: $('.production .floor'),
+}
+
+/*
+one piece of tile has four blocks,
+so one pattern contains four values,
+represent separately the angle of the four blocks:
+top left block, top right block, bottom left block, bottom right block.
+*/
+let patterns = [
+    [0, 0, 0, 0], //the default pattern
+    [0, 90, 270, 180],
+    [180, 270, 90, 0],
+    [270, 0, 180, 90],
+    [90, 270, 270, 90],
+    [180, 270, 0, 90],
+    [270, 270, 90, 90],
+    [270, 180, 0, 90],
+    [0, 270, 90, 180],
+    [180, 270, 180, 270],
+    [270, 180, 180, 270],
+    [180, 90, 90, 180],
+]
+
+function paveTiles(countOfPerSide) {
+    let count = Math.pow(countOfPerSide, 2)
+    dom.floor.innerHTML = ''
+    new Array(count).fill('').forEach(() => {
+        dom.floor.append(dom.sampleTile.cloneNode(true))
+    })
+
+    dom.floor.style.setProperty('--count-of-per-side', countOfPerSide)
+}
+
+function getCssVariableName(sequenceNumberOfBlcok) {
+    return `--block-angle-${sequenceNumberOfBlcok}`
+}
+
+function rotateBlock(num) {
+    let angle = +dom.root.style.getPropertyValue(getCssVariableName(num)) + 90
+    setBlockAngle(num, angle)
+}
+
+function setBlockAngle(num, angle) {
+    dom.root.style.setProperty(getCssVariableName(num), angle)
+}
+
+function initPatternList() {
+    patterns.forEach((pattern) => {
+        let $newTile = dom.sampleTile.cloneNode(true)
+        Array.from($newTile.children).forEach((block, i) => {
+            block.style.setProperty(getCssVariableName(i + 1), pattern[i])
+        })
+        dom.patternList.append($newTile)
+    })
+}
+
+function initFloor() {
+    paveTiles(parseInt(dom.gridList.children[0].innerText))
+}
+
+function initEvent() {
+    //when any block of the sample tile is clicked,
+    //the block will turn right 90 degrees
+    Array.from(dom.sampleTile.children).forEach((block, i) => {
+        block.addEventListener('click', () => {
+            rotateBlock(i + 1)
+        })
+    })
+
+    //when any tile of the pattern list is clicked,
+    //the pattern will be applied to sample
+    Array.from(dom.patternList.children).forEach((tile, i) => {
+        tile.addEventListener('click', () => {
+            patterns[i].forEach((angle, j) => setBlockAngle(j + 1, angle))
+        })
+    })
+
+    //when any button of the grid list is clicked,
+    //the floor will be re-paved according to the specified size
+    Array.from(dom.gridList.children).forEach(button => {
+        button.addEventListener('click', (e) => {
+            paveTiles(parseInt(e.target.innerText))
+        })
+    })
+}
+
+function init() {
+    initPatternList()
+    initFloor()
+    initEvent()
+}
+
+window.onload = init()
+
+</script>
+</body>
+</html>
