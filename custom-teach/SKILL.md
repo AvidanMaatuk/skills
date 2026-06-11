@@ -1,6 +1,6 @@
 ---
-name: teach
-description: Teach the user a new skill or concept, within this workspace.
+name: custom-teach
+description: Teach the user a new skill or concept, within this workspace CUSTOM: add cariculam and animation.
 disable-model-invocation: true
 argument-hint: "What would you like to learn about?"
 ---
