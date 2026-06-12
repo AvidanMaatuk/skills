@@ -27,7 +27,7 @@ cp -r custom-teach ~/.claude/skills/custom-teach
 Then invoke it in Claude Code:
 
 ```
-/teach What would you like to learn?
+/custom-teach What would you like to learn?
 ```
 
 ## Animation library

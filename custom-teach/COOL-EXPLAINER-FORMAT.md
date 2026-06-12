@@ -16,7 +16,7 @@ into the workspace, reskin the tokens, and replace the stages.
 
 Use this format **only when the user explicitly asks for it** — phrases like
 "make it cool", "the cool format", "cool explainer", "do it in the cool style", or a
-`/teach … cool` style request. Default explainers follow [SKILL.md](./SKILL.md) as
+`/custom-teach … cool` style request. Default explainers follow [SKILL.md](./SKILL.md) as
 usual; this format is never the silent default.
 
 Once the user has asked for it in a workspace, treat it as **sticky for that topic**:
