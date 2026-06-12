@@ -99,11 +99,11 @@ Hard budget: at most **2 decorative animations** (emphasis/reward) per explainer
 
 ## Cool Explainer Format (opt-in)
 
-There is a bolder, signature explainer style available: a single self-contained HTML lesson with a boot-up intro, neon blueprint surface, scroll-staged sections, hand-built interactive simulations, and a self-scoring quiz. The full spec and a working starter skeleton are in [COOL-EXPLAINER-FORMAT.md](./COOL-EXPLAINER-FORMAT.md) and [cool-explainer-template.html](./cool-explainer-template.html).
+There is a bolder, signature explainer style available: a single self-contained HTML lesson with a boot-up intro, neon blueprint surface, scroll-staged sections, hand-built interactive simulations, and a self-scoring quiz. The full spec and a working starter skeleton are in [COOL-EXPLAINER-FORMAT.md](./lessons-formats/Cool/COOL-EXPLAINER-FORMAT.md) and [cool-explainer-template.html](./lessons-formats/Cool/cool-explainer-template.html).
 
 **Use it only when the user explicitly asks for it** — "make it cool", "the cool format", "cool explainer", "do it in the cool style", or similar. It is never the silent default; default explainers follow the guidance above. When the user does ask:
 
-- Read [COOL-EXPLAINER-FORMAT.md](./COOL-EXPLAINER-FORMAT.md) and **follow it precisely** — start from `cool-explainer-template.html`, copy it into the workspace, reskin the `:root` tokens and fonts to the topic, and replace the stages.
+- Read [COOL-EXPLAINER-FORMAT.md](./lessons-formats/Cool/COOL-EXPLAINER-FORMAT.md) and **follow it precisely** — start from `cool-explainer-template.html`, copy it into the workspace, reskin the `:root` tokens and fonts to the topic, and replace the stages.
 - Keep the skill's pedagogy intact: mission-grounded, `GLOSSARY.md`-true, citation-backed, tied to the zone of proximal development. The cool format changes the *delivery*, not the teaching.
 - Treat the choice as **sticky for the workspace**: once asked, later explainers in that topic keep the format. Note it in `CURRICULUM.md` so future sessions stay consistent.
 - Run the format's pre-ship checklist before handing the explainer over.

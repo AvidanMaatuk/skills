@@ -4,7 +4,7 @@ An **opt-in** explainer style for the teaching skill: a single, self-contained H
 lesson with a signature look (boot-up intro, neon blueprint surface, scroll-staged
 sections), heavy-but-earned animation, hand-built interactive simulations, and a
 quiz that scores itself. It is a *skin and a structure* layered on top of the normal
-explainer guidance in [SKILL.md](./SKILL.md) — same pedagogy (mission-grounded,
+explainer guidance in [SKILL.md](../../SKILL.md) — same pedagogy (mission-grounded,
 glossary-true, citation-backed), a much bolder delivery.
 
 A working skeleton lives next to this file: [`cool-explainer-template.html`](./cool-explainer-template.html).
@@ -16,7 +16,7 @@ into the workspace, reskin the tokens, and replace the stages.
 
 Use this format **only when the user explicitly asks for it** — phrases like
 "make it cool", "the cool format", "cool explainer", "do it in the cool style", or a
-`/custom-teach … cool` style request. Default explainers follow [SKILL.md](./SKILL.md) as
+`/custom-teach … cool` style request. Default explainers follow [SKILL.md](../../SKILL.md) as
 usual; this format is never the silent default.
 
 Once the user has asked for it in a workspace, treat it as **sticky for that topic**:
@@ -31,7 +31,7 @@ in cool format, so future sessions stay consistent.
    build step, no module imports, no `fetch`.
    *(If a concept genuinely needs a bundled library from the skill's reuse ladder —
    GSAP for scroll choreography, zdog for 3D — you may wire `./assets/…` per
-   [ANIMATIONS-FORMAT.md](./ANIMATIONS-FORMAT.md). Most cool-format sims are plain
+   [ANIMATIONS-FORMAT.md](../../ANIMATIONS-FORMAT.md). Most cool-format sims are plain
    CSS/JS and need nothing.)*
 2. **Direction & language follow the learner.** Set `<html lang dir>` correctly —
    `dir="rtl"` for Hebrew/Arabic. Wrap every technical/foreign term in a `.term` chip
@@ -128,7 +128,7 @@ All recipes are in the template's CSS — reuse the class, don't re-invent.
 When a stage needs a bespoke widget (a state-machine diagram, a Gantt chart, an
 address translator), build it inside the `.sim` shell with the same tokens, the same
 `.status` narration, and a working **Reset**. Save genuinely reusable widgets back to
-the skill's `animations/` library per [ANIMATIONS-FORMAT.md](./ANIMATIONS-FORMAT.md).
+the skill's `animations/` library per [ANIMATIONS-FORMAT.md](../../ANIMATIONS-FORMAT.md).
 
 ## Designing a simulation (the heart of the format)
 
