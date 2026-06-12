@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  COOL EXPLAINER TEMPLATE  ·  custom-teach skill
+  ============================================================================
+  This is a WORKING skeleton. Open it in a browser right now — it runs.
+  Fill in the stages, reskin the palette, and you have a "cool" explainer.
+
+  HOW TO USE (see COOL-EXPLAINER-FORMAT.md for the full spec):
+   1. Set <html lang/dir>  — LTR by default; use dir="rtl" for Hebrew/Arabic.
+   2. Pick a THEME: edit the :root tokens + the two Google Fonts.
+   3. Edit the boot lines, hero copy, and per-lesson chip (LESSON N / TOTAL).
+   4. Replace each <section class="stage"> with your real content.
+   5. Build at least ONE interactive sim per concept that involves motion,
+      sequence, state, or comparison. Copy the SIM pattern at the bottom.
+   6. Put a .quiz checkpoint after most stages; end with a 3-question final.
+   7. Run the pre-ship checklist in the format doc.
+
+  EDIT markers below: search for  ⟦EDIT⟧  to find everything you must change.
+  ============================================================================
+-->
+<html lang="en" dir="ltr"><!-- ⟦EDIT⟧ lang/dir: dir="rtl" for Hebrew/Arabic -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⟦EDIT⟧ Lesson Title — Cool Explainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- ⟦EDIT⟧ Fonts: a distinctive DISPLAY font + a clean BODY font + a MONO font.
+     Avoid Inter/Roboto/Arial. Examples by mood:
+       tech/blueprint : Suez One / Space Mono · body Heebo or IBM Plex Sans
+       editorial      : Fraunces / Playfair Display · body Newsreader
+       retro-future   : Orbitron / Major Mono · body Chakra Petch
+       organic/warm   : Fredoka / Quicksand · body Nunito Sans            -->
+<link href="https://fonts.googleapis.com/css2?family=Suez+One&family=Heebo:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN SYSTEM  ·  default theme = "blueprint console" (dark, cyan+amber)
+   ⟦EDIT⟧ Reskin by changing these tokens. Keep the STRUCTURE; change the SKIN.
+   Commit to a bold direction (see format doc for light/editorial/retro tokens).
+   ============================================================ */
+:root{
+  --bg:#06080f; --bg-2:#0b101e; --panel:#101729; --panel-2:#161f38;
+  --line:rgba(76,201,240,.14);
+  --ink:#e8eefc; --muted:#8b97b5;
+  --accent:#4cc9f0;  --accent-soft:rgba(76,201,240,.12);   /* primary / "subject A" */
+  --amber:#ffb703;   --amber-soft:rgba(255,183,3,.12);      /* emphasis / "subject B" */
+  --good:#2dd4a7; --bad:#ff5d73; --violet:#a78bfa;          /* success / error / quiz+waiting */
+  --font-display:'Suez One',serif;
+  --font-body:'Heebo',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --radius:14px;
+  --glow-accent:0 0 24px rgba(76,201,240,.35);
+  --glow-amber:0 0 24px rgba(255,183,3,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+::selection{background:var(--amber);color:var(--bg)}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.75;overflow-x:hidden}
+/* atmosphere: grid + glow + scanlines. ⟦EDIT⟧ swap for your theme's texture. */
+body::before{content:"";position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(1100px 600px at 85% -10%,var(--accent-soft),transparent 60%),
+    radial-gradient(900px 500px at 10% 110%,var(--amber-soft),transparent 60%),
+    linear-gradient(rgba(76,201,240,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(76,201,240,.045) 1px,transparent 1px);
+  background-size:auto,auto,42px 42px,42px 42px;}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.12) 3px 4px);opacity:.5}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:#22304f;border-radius:6px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+
+/* ===== BOOT / INTRO OVERLAY ===== */
+#boot{position:fixed;inset:0;z-index:100;background:#04060c;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;font-family:var(--font-mono);cursor:pointer;
+  transition:opacity .8s ease,visibility .8s}
+#boot.off{opacity:0;visibility:hidden}
+#boot .lines{direction:ltr;text-align:left;font-size:clamp(.7rem,1.6vw,.9rem);color:#4f6388;min-height:11em;width:min(620px,90vw)}
+#boot .logo{font-family:var(--font-display);font-size:clamp(2rem,6vw,3.4rem);color:var(--ink);margin-bottom:24px;
+  opacity:0;transform:scale(.92);text-shadow:0 0 40px rgba(76,201,240,.7);
+  transition:opacity .9s ease,transform .9s cubic-bezier(.2,1.4,.3,1)}
+#boot .logo.show{opacity:1;transform:scale(1)}
+#boot .skip{position:absolute;bottom:26px;color:#3c4d70;font-size:.78rem;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ===== PROGRESS + SIDE NAV ===== */
+#progress{position:fixed;top:0;right:0;left:0;height:4px;z-index:60;background:rgba(76,201,240,.08)}
+#progress .fill{height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--accent));
+  box-shadow:0 0 12px rgba(76,201,240,.8);transition:width .2s}
+#nav{position:fixed;top:50%;left:18px;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:10px}
+/* RTL note: side nav sits on the left in both directions — fine. Tooltips flip automatically. */
+#nav a{width:14px;height:14px;border-radius:50%;border:2px solid #2c3c61;background:transparent;display:block;position:relative;transition:.3s}
+#nav a:hover{border-color:var(--accent)}
+#nav a .tip{position:absolute;right:24px;top:50%;transform:translateY(-50%) translateX(8px);left:auto;
+  background:var(--panel-2);border:1px solid var(--line);color:var(--ink);font-size:.72rem;padding:3px 10px;
+  border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:.25s}
+#nav a:hover .tip{opacity:1;transform:translateY(-50%) translateX(0)}
+#nav a.active{border-color:var(--accent);background:var(--accent);box-shadow:var(--glow-accent)}
+#nav a.done{border-color:var(--good);background:var(--good)}
+@media(max-width:900px){#nav{display:none}}
+
+/* ===== LAYOUT + SCROLL REVEAL ===== */
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+section.stage{padding:90px 0 50px;position:relative}
+section.stage+section.stage{border-top:1px dashed rgba(76,201,240,.12)}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.9,.3,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.12s}.rv.d2{transition-delay:.24s}.rv.d3{transition-delay:.36s}.rv.d4{transition-delay:.48s}
+
+/* ===== HERO ===== */
+#hero{min-height:100vh;display:flex;align-items:center;padding:60px 0}
+.chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.78rem;color:var(--amber);
+  border:1px solid rgba(255,183,3,.35);background:var(--amber-soft);padding:5px 14px;border-radius:999px;margin-bottom:22px}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:pulse 1.6s infinite}
+h1.mega{font-family:var(--font-display);font-size:clamp(2.6rem,7vw,5rem);line-height:1.12;margin-bottom:10px}
+h1.mega .stroke{color:transparent;-webkit-text-stroke:2px var(--accent);display:inline-block}
+h1.mega .glow{color:var(--accent);text-shadow:0 0 50px rgba(76,201,240,.55)}
+.sub{color:var(--muted);font-size:1.15rem;max-width:560px;font-weight:300}
+.sub b{color:var(--ink);font-weight:500}
+.hero-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.meta-card{border:1px solid var(--line);background:rgba(16,23,41,.7);border-radius:var(--radius);padding:12px 18px;font-size:.85rem;color:var(--muted);backdrop-filter:blur(4px)}
+.meta-card b{display:block;color:var(--ink);font-size:1.05rem;font-weight:700}
+.scroll-hint{margin-top:54px;color:#3c4d70;font-size:.8rem;display:flex;align-items:center;gap:10px}
+.scroll-hint .arr{animation:bob 1.6s ease-in-out infinite;font-size:1.1rem;color:var(--accent)}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+
+/* ===== SECTION HEADERS ===== */
+.stage-tag{font-family:var(--font-mono);font-size:.75rem;color:var(--accent);letter-spacing:.12em;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.stage-tag::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--line),transparent)}
+h2.stage-title{font-family:var(--font-display);font-size:clamp(1.7rem,4vw,2.6rem);margin-bottom:18px;line-height:1.2}
+h2.stage-title em{font-style:normal;color:var(--amber)}
+.lead{color:var(--muted);font-size:1.05rem;max-width:680px;margin-bottom:34px}
+.lead b,.lead strong{color:var(--ink)}
+
+/* ===== CARDS / TERMS / CALLOUTS / FLIP ===== */
+.grid{display:grid;gap:16px}.grid.c2{grid-template-columns:repeat(2,1fr)}.grid.c3{grid-template-columns:repeat(3,1fr)}.grid.c4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:760px){.grid.c2,.grid.c3,.grid.c4{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);background:linear-gradient(160deg,var(--panel),var(--bg-2));border-radius:var(--radius);
+  padding:22px;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.2,.9,.3,1),border-color .35s,box-shadow .35s}
+.card:hover{transform:translateY(-5px);border-color:rgba(76,201,240,.45);box-shadow:0 14px 40px rgba(0,0,0,.45),var(--glow-accent)}
+.card .ico{font-size:1.7rem;margin-bottom:10px;display:block}
+.card h3{font-size:1.05rem;font-weight:700;margin-bottom:6px}
+.card p{color:var(--muted);font-size:.92rem}
+/* .term = glossary chip. ALWAYS wrap a foreign/technical term; ltr inside rtl text. */
+.term{font-family:var(--font-mono);font-size:.82em;color:var(--accent);background:var(--accent-soft);
+  border:1px solid rgba(76,201,240,.3);border-radius:6px;padding:1px 7px;direction:ltr;display:inline-block;white-space:nowrap}
+.term.am{color:var(--amber);background:var(--amber-soft);border-color:rgba(255,183,3,.3)}
+.callout{border-inline-start:4px solid var(--amber);background:var(--amber-soft);border-radius:10px;padding:16px 20px;margin:24px 0;font-size:.95rem}
+.callout.cy{border-color:var(--accent);background:var(--accent-soft)}
+.callout b{color:var(--amber)}.callout.cy b{color:var(--accent)}
+.callout .tit{display:flex;align-items:center;gap:8px;font-weight:900;margin-bottom:4px}
+.callout a{color:var(--accent)} /* citations live here — see format doc */
+.flip{perspective:900px;height:150px;cursor:pointer}
+.flip .inner{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.2,.9,.3,1);transform-style:preserve-3d}
+.flip.flipped .inner{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;border:1px solid var(--line);padding:14px;gap:6px}
+.flip .front{background:linear-gradient(160deg,var(--panel),var(--bg-2))}
+.flip .front .en{font-family:var(--font-mono);color:var(--accent);font-size:.95rem;direction:ltr}
+.flip .front .he{font-weight:700}.flip .front .hint{font-size:.68rem;color:#3c4d70}
+.flip .back{background:linear-gradient(160deg,#13202e,#0c1420);border-color:rgba(45,212,167,.35);transform:rotateY(180deg)}
+.flip .back p{font-size:.8rem;color:var(--muted);line-height:1.5}
+
+/* ===== BUTTONS ===== */
+.btn{font-family:var(--font-body);font-weight:700;font-size:.92rem;cursor:pointer;border:1px solid var(--accent);
+  color:var(--bg);background:var(--accent);padding:10px 22px;border-radius:10px;transition:.25s;box-shadow:var(--glow-accent)}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.12)}.btn:active{transform:translateY(0)}
+.btn.ghost{background:transparent;color:var(--accent);box-shadow:none}
+.btn.am{background:var(--amber);border-color:var(--amber);box-shadow:var(--glow-amber);color:var(--bg)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+/* ===== SIM SHELL (every interactive simulation lives in this chrome) ===== */
+.sim{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin:30px 0;background:#0a0f1d;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.sim .bar{display:flex;align-items:center;gap:8px;background:#0e1526;border-bottom:1px solid var(--line);padding:10px 16px;font-family:var(--font-mono);font-size:.75rem;color:var(--muted)}
+.sim .bar .dots{display:flex;gap:6px}
+.sim .bar .dots i{width:11px;height:11px;border-radius:50%;display:block}
+.sim .bar .dots i:nth-child(1){background:#ff5d73}.sim .bar .dots i:nth-child(2){background:var(--amber)}.sim .bar .dots i:nth-child(3){background:var(--good)}
+.sim .body{padding:26px}
+.status{font-family:var(--font-mono);font-size:.85rem;background:#070b14;border:1px solid var(--line);border-radius:10px;padding:12px 16px;color:var(--accent);min-height:3em;margin-top:18px}
+.steps{display:flex;gap:6px;margin-top:18px;flex-wrap:wrap}
+.steps i{font-style:normal;font-family:var(--font-mono);font-size:.7rem;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:3px 12px;transition:.3s}
+.steps i.on{color:var(--bg);background:var(--accent);border-color:var(--accent);box-shadow:var(--glow-accent)}
+.steps i.was{color:var(--good);border-color:rgba(45,212,167,.5)}
+/* example sim widget (a token moving between two lanes); replace per concept */
+.lane{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.lane .who{width:120px;text-align:center;font-weight:700;font-size:.85rem;border:1px solid var(--line);border-radius:10px;padding:10px 6px;background:var(--panel);flex-shrink:0;transition:.3s}
+.lane .who.hot{border-color:var(--amber);box-shadow:var(--glow-amber);transform:scale(1.05)}
+.lane .track{flex:1;height:34px;border-radius:8px;background:#070b14;border:1px solid var(--line);position:relative;overflow:hidden}
+.lane .fillbar{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,var(--accent-soft),var(--accent));transition:width .5s linear}
+
+/* ===== QUIZ ENGINE ===== */
+.quiz{border:1px solid rgba(167,139,250,.3);border-radius:var(--radius);padding:24px;margin-top:34px;background:linear-gradient(160deg,rgba(167,139,250,.07),transparent)}
+.quiz .qtag{font-family:var(--font-mono);font-size:.7rem;color:var(--violet);letter-spacing:.15em;margin-bottom:8px}
+.quiz h4{font-size:1.05rem;margin-bottom:16px}
+.quiz .opts{display:grid;gap:10px}
+.quiz .opt{text-align:start;border:1px solid var(--line);background:var(--panel);color:var(--ink);font-family:var(--font-body);font-size:.92rem;border-radius:10px;padding:12px 16px;cursor:pointer;transition:.25s}
+.quiz .opt:hover{border-color:var(--violet);transform:translateX(-4px)}
+.quiz .opt.right{border-color:var(--good);background:rgba(45,212,167,.12);box-shadow:0 0 18px rgba(45,212,167,.25)}
+.quiz .opt.wrong{border-color:var(--bad);background:rgba(255,93,115,.1)}
+.quiz .fb{margin-top:14px;font-size:.88rem;min-height:1.4em}
+.quiz .fb.ok{color:var(--good)}.quiz .fb.no{color:var(--bad)}
+#final-score{text-align:center;padding:30px 0 0;display:none}
+#final-score .big{font-family:var(--font-display);font-size:4rem;color:var(--amber);text-shadow:var(--glow-amber)}
+#final-score p{color:var(--muted)}
+
+footer{padding:60px 0 80px;text-align:center;color:#3c4d70;font-size:.8rem;font-family:var(--font-mono)}
+footer a{color:var(--accent);text-decoration:none}
+
+/* ===== FEEDBACK FX ===== */
+.confetti{position:fixed;top:-20px;z-index:90;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2}}
+.flash{animation:flash .5s}@keyframes flash{0%{filter:brightness(2.4)}100%{filter:none}}
+.shake{animation:shake .45s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}50%{transform:translateX(7px)}}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== BOOT OVERLAY  ⟦EDIT⟧ make boot lines themed to the topic ===== -->
+<div id="boot" title="click to skip">
+  <div class="logo" id="bootLogo">⟦EDIT⟧ THEME NAME</div>
+  <div class="lines" id="bootLines"></div>
+  <div class="skip">click anywhere to skip ›</div>
+</div>
+
+<div id="progress"><div class="fill"></div></div>
+<nav id="nav"></nav>
+
+<!-- ===== HERO ===== -->
+<header id="hero">
+  <div class="wrap">
+    <div class="chip rv"><span class="dot"></span> ⟦EDIT⟧ SESSION TAG · LESSON 1 / N</div>
+    <h1 class="mega rv d1">⟦EDIT⟧ <span class="stroke">Two-word</span><br><span class="glow">Title</span></h1>
+    <p class="sub rv d2">⟦EDIT⟧ One or two sentences that open with a hook or promise, tied to the
+      learner's <b>mission</b>. Say why this matters before defining anything.</p>
+    <div class="hero-meta rv d3">
+      <div class="meta-card"><b>N</b> stages</div>
+      <div class="meta-card"><b>N</b> simulations</div>
+      <div class="meta-card"><b>~N</b> min</div>
+      <div class="meta-card"><b>N</b> questions</div>
+    </div>
+    <div class="scroll-hint rv d4"><span class="arr">▼</span> ⟦EDIT⟧ themed scroll prompt</div>
+  </div>
+</header>
+
+<!-- ===== STAGE 1 (example: cards + checkpoint) ⟦EDIT⟧ ===== -->
+<section class="stage" id="s1" data-name="⟦EDIT⟧ Stage name">
+  <div class="wrap">
+    <div class="stage-tag rv">STAGE 01 · CONCEPT_KEY</div>
+    <h2 class="stage-title rv">⟦EDIT⟧ Headline with one <em>highlighted</em> word</h2>
+    <p class="lead rv d1">⟦EDIT⟧ Open with the central idea, the key <strong>term</strong> in bold.
+      Wrap technical terms in chips like <span class="term">technical_term</span>.</p>
+    <div class="grid c3">
+      <div class="card rv"><span class="ico">🧩</span><h3>Idea A</h3><p>One crisp explanation. Cite sources in callouts.</p></div>
+      <div class="card rv d1"><span class="ico">⚙️</span><h3>Idea B</h3><p>Keep cards parallel and scannable.</p></div>
+      <div class="card rv d2"><span class="ico">🚀</span><h3>Idea C</h3><p>Hover lifts; reveal staggers.</p></div>
+    </div>
+    <div class="callout cy rv">
+      <div class="tit">📌 Worth remembering</div>
+      ⟦EDIT⟧ The exam-ready statement. Add a citation: <a href="#">source ↗</a>.
+    </div>
+    <div class="quiz" data-quiz>
+      <div class="qtag">CHECKPOINT 01</div>
+      <h4>⟦EDIT⟧ A question whose distractors are real misconceptions.</h4>
+      <div class="opts">
+        <button class="opt" data-ok="0">Plausible wrong answer</button>
+        <button class="opt" data-ok="1">The correct answer</button>
+        <button class="opt" data-ok="0">Another tempting wrong answer</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STAGE 2 (example: interactive SIM as a state machine) ⟦EDIT⟧ ===== -->
+<section class="stage" id="s2" data-name="⟦EDIT⟧ Sim stage">
+  <div class="wrap">
+    <div class="stage-tag rv">STAGE 02 · LIVE_SIM</div>
+    <h2 class="stage-title rv">⟦EDIT⟧ Animate the <em>process</em>, step by step</h2>
+    <p class="lead rv d1">⟦EDIT⟧ Whenever a concept involves motion, sequence, state, or comparison,
+      build a sim. It must explain itself step-by-step in the status line.</p>
+    <div class="sim rv" id="demoSim">
+      <div class="bar"><span class="dots"><i></i><i></i><i></i></span> SIM · ⟦EDIT⟧ TITLE</div>
+      <div class="body">
+        <div class="lane"><div class="who" id="laneA">stage A<br><small>idle</small></div>
+          <div class="track"><div class="fillbar" id="fillA"></div></div></div>
+        <div class="lane"><div class="who" id="laneB">stage B<br><small>idle</small></div>
+          <div class="track"><div class="fillbar" id="fillB" style="background:linear-gradient(90deg,var(--amber-soft),var(--amber))"></div></div></div>
+        <div class="steps" id="demoSteps"><i>1 · start</i><i>2 · transfer</i><i>3 · done</i></div>
+        <div class="status" id="demoStatus">Press “Run” to watch the process unfold.</div>
+        <div class="btn-row">
+          <button class="btn" id="demoRun">▶ Run</button>
+          <button class="btn ghost" id="demoReset">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+    <div class="quiz" data-quiz>
+      <div class="qtag">CHECKPOINT 02</div>
+      <h4>⟦EDIT⟧ Question about what the sim just demonstrated.</h4>
+      <div class="opts">
+        <button class="opt" data-ok="1">Correct</button>
+        <button class="opt" data-ok="0">Wrong</button>
+      </div>
+      <div class="fb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ⟦EDIT⟧ Add stages s3…sN. Keep one concept per stage. Final stage = the quiz below. -->
+
+<!-- ===== FINAL STAGE: scored quiz ===== -->
+<section class="stage" id="sFinal" data-name="Final check">
+  <div class="wrap">
+    <div class="stage-tag rv">FINAL · CHECK</div>
+    <h2 class="stage-title rv">Final check — <em>did it compile?</em></h2>
+    <p class="lead rv d1">⟦EDIT⟧ A few integrative questions spanning the whole lesson.</p>
+
+    <div class="quiz" data-quiz data-final>
+      <div class="qtag">FINAL 1/3</div>
+      <h4>⟦EDIT⟧ Integrative question 1</h4>
+      <div class="opts">
+        <button class="opt" data-ok="1">Correct</button>
+        <button class="opt" data-ok="0">Wrong</button>
+        <button class="opt" data-ok="0">Wrong</button>
+      </div><div class="fb"></div>
+    </div>
+    <div class="quiz" data-quiz data-final>
+      <div class="qtag">FINAL 2/3</div>
+      <h4>⟦EDIT⟧ Integrative question 2</h4>
+      <div class="opts">
+        <button class="opt" data-ok="0">Wrong</button>
+        <button class="opt" data-ok="1">Correct</button>
+      </div><div class="fb"></div>
+    </div>
+    <div class="quiz" data-quiz data-final>
+      <div class="qtag">FINAL 3/3</div>
+      <h4>⟦EDIT⟧ Integrative question 3</h4>
+      <div class="opts">
+        <button class="opt" data-ok="0">Wrong</button>
+        <button class="opt" data-ok="1">Correct</button>
+      </div><div class="fb"></div>
+    </div>
+
+    <div id="final-score"><div class="big" id="scoreNum">0/3</div><p id="scoreMsg"></p></div>
+  </div>
+</section>
+
+<footer>
+  ⟦EDIT⟧ THEME NAME · {course} · {lesson}<br>
+  built with custom-teach · cool explainer format<br>
+  <a href="../index.html">⌂ back to hub</a>
+</footer>
+
+<script>
+/* ============================================================
+   INFRASTRUCTURE — generic, reuse as-is. Topic logic goes in the SIM block.
+   ============================================================ */
+
+/* ===== BOOT SEQUENCE  ⟦EDIT⟧ theme the lines ===== */
+const bootLines=[
+  ["booting ⟦EDIT⟧ ...",300],
+  ["loading modules ...",380],
+  ["starting interactive runtime ...",420],
+  ["<span style='color:#4cc9f0'>ready — entering lesson</span>",500]
+];
+const bootEl=document.getElementById('boot'),linesEl=document.getElementById('bootLines'),logoEl=document.getElementById('bootLogo');
+let bi=0,bootDone=false;
+function typeLine(){
+  if(bi>=bootLines.length){logoEl.classList.add('show');setTimeout(endBoot,1100);return;}
+  const[t,d]=bootLines[bi++];const el=document.createElement('div');el.innerHTML="> "+t;linesEl.appendChild(el);setTimeout(typeLine,d);
+}
+function endBoot(){if(bootDone)return;bootDone=true;bootEl.classList.add('off');}
+bootEl.addEventListener('click',endBoot);setTimeout(typeLine,400);setTimeout(endBoot,5500);/* safety */
+
+/* ===== SCROLL REVEAL ===== */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});
+document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+document.querySelectorAll('#hero .rv').forEach(e=>setTimeout(()=>e.classList.add('in'),800));
+
+/* ===== SIDE NAV + PROGRESS ===== */
+const sections=[...document.querySelectorAll('section.stage')];
+const nav=document.getElementById('nav');
+sections.forEach(s=>{const a=document.createElement('a');a.href='#'+s.id;a.innerHTML='<span class="tip">'+s.dataset.name+'</span>';nav.appendChild(a)});
+const navDots=[...nav.children];
+const fill=document.querySelector('#progress .fill');
+addEventListener('scroll',()=>{const h=document.documentElement;fill.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'},{passive:true});
+const secIO=new IntersectionObserver(es=>es.forEach(e=>{const i=sections.indexOf(e.target);if(e.isIntersecting){navDots.forEach(d=>d.classList.remove('active'));navDots[i].classList.add('active','done')}}),{threshold:.3});
+sections.forEach(s=>secIO.observe(s));
+
+/* ===== FLIP CARDS ===== */
+document.querySelectorAll('.flip').forEach(f=>{
+  f.addEventListener('click',()=>f.classList.toggle('flipped'));
+  f.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f.classList.toggle('flipped')}});
+});
+
+/* ===== CONFETTI ===== */
+const COLORS=['#4cc9f0','#ffb703','#2dd4a7','#a78bfa','#ff5d73'];
+function spawnConf(x,n,spread){for(let i=0;i<n;i++){const c=document.createElement('div');c.className='confetti';const s=4+Math.random()*7;
+  c.style.cssText=`left:${x+(Math.random()-.5)*spread}px;width:${s}px;height:${s*1.4}px;background:${COLORS[i%COLORS.length]};animation-duration:${1.6+Math.random()*1.8}s;border-radius:2px`;
+  document.body.appendChild(c);setTimeout(()=>c.remove(),4000)}}
+function miniConfetti(el){const r=el.getBoundingClientRect();spawnConf(r.left+r.width/2,18,160)}
+function bigConfetti(){for(let k=0;k<5;k++)setTimeout(()=>spawnConf(Math.random()*innerWidth,30,300),k*250)}
+
+/* ===== QUIZ ENGINE ===== */
+const finals=[...document.querySelectorAll('[data-final]')];
+let finalRight=0,finalAnswered=0;
+document.querySelectorAll('[data-quiz]').forEach(q=>{
+  const fb=q.querySelector('.fb');let locked=false;
+  q.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',()=>{
+    if(locked)return;locked=true;
+    const ok=o.dataset.ok==='1';
+    o.classList.add(ok?'right':'wrong');
+    if(!ok)q.querySelector('[data-ok="1"]').classList.add('right');
+    fb.textContent=ok?'✓ Correct.':'✗ Not quite — the right answer is highlighted.';
+    fb.className='fb '+(ok?'ok':'no');
+    if(q.hasAttribute('data-final')){finalAnswered++;if(ok)finalRight++;if(finalAnswered===finals.length)showScore();}
+    else if(ok)miniConfetti(o);
+  }));
+});
+function showScore(){
+  const box=document.getElementById('final-score');box.style.display='block';
+  document.getElementById('scoreNum').textContent=finalRight+'/'+finals.length;
+  const msg=document.getElementById('scoreMsg');
+  if(finalRight===finals.length){msg.textContent='🏆 Perfect — lesson complete.';bigConfetti();}
+  else if(finalRight>=Math.ceil(finals.length*.66))msg.textContent='Almost — revisit the stage you missed.';
+  else msg.textContent='Revisit the sims and try again after a refresh.';
+  /* ⟦EDIT⟧ optional: persist score, e.g. localStorage.setItem('cool-lesson-N', finalRight+'/'+finals.length) */
+  box.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+/* ============================================================
+   SIM LOGIC — the heart. One state machine per concept.
+   PATTERN: keep a timers[] array; Reset must clear it; the status line
+   narrates each numbered step; mark .steps as on/was as you advance.
+   ⟦EDIT⟧ Replace this demo with your concept's machine.
+   ============================================================ */
+(function(){
+  const steps=[...document.querySelectorAll('#demoSteps i')];
+  const st=document.getElementById('demoStatus');
+  const fillA=document.getElementById('fillA'),fillB=document.getElementById('fillB');
+  const laneA=document.getElementById('laneA'),laneB=document.getElementById('laneB');
+  const run=document.getElementById('demoRun');
+  let timers=[];
+  const later=(fn,t)=>timers.push(setTimeout(fn,t));
+  const setStep=i=>steps.forEach((s,j)=>{s.classList.toggle('on',j===i);s.classList.toggle('was',j<i)});
+  function reset(){
+    timers.forEach(clearTimeout);timers=[];
+    fillA.style.width=fillB.style.width='0%';
+    laneA.classList.remove('hot');laneB.classList.remove('hot');
+    steps.forEach(s=>s.className='');
+    st.textContent='Press “Run” to watch the process unfold.';run.disabled=false;
+  }
+  document.getElementById('demoReset').addEventListener('click',reset);
+  run.addEventListener('click',()=>{
+    reset();run.disabled=true;
+    setStep(0);st.textContent='① Stage A begins its work.';laneA.classList.add('hot');fillA.style.width='60%';
+    later(()=>{setStep(1);st.textContent='② Work transfers to stage B.';laneA.classList.remove('hot');laneB.classList.add('hot');fillB.style.width='100%';},1300);
+    later(()=>{setStep(2);st.textContent='③ Done — both stages complete. ✓';laneB.classList.remove('hot');fillA.style.width='100%';run.disabled=false;},2600);
+  });
+})();
+</script>
+</body>
+</html>

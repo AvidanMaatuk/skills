@@ -32,20 +32,21 @@ Then invoke it in Claude Code:
 
 ## Animation library
 
-45 curated, self-contained HTML snippets in `animations/`, catalogued in `animations/INDEX.md` by pedagogical use (process, spatial, motion, state, emphasis, exercise, diagram, hook, reward).
+52 curated, self-contained HTML snippets in `animations/`, catalogued in `animations/INDEX.md` by pedagogical use (process, spatial, motion, state, emphasis, exercise, diagram, hook, reward) and by library (`css`, `js`, `anime`, `gsap`, `shadcn`, `zdog`, `lottie`).
 
-The bundled assets (`assets/`) are copied into the workspace the first time an explainer is generated, so all HTML works offline.
+The bundled assets (`assets/`) are copied into the workspace the first time an explainer is generated, so all HTML works offline. GSAP-correct and shadcn-correct authoring is backed by condensed cheatsheets in [`references/`](custom-teach/references/) (`gsap.md`, `shadcn.md`), distilled from the official [GSAP skills](https://github.com/greensock/gsap-skills).
 
 ## Additions over the original skill
 
 | Feature | Original | custom-teach |
 |---|---|---|
 | Curriculum coverage map | — | CURRICULUM.md, evidence-gated |
-| Animation library | — | 45 snippets + INDEX |
-| Concept→technique mapping | — | anime.js / zdog / CSS / Lottie |
+| Animation library | — | 52 snippets + INDEX |
+| Concept→technique mapping | — | CSS / anime.js / GSAP (+ScrollTrigger) / shadcn / zdog / Lottie |
+| Library cheatsheets | — | references/gsap.md, references/shadcn.md |
 | Reuse ladder | — | search → modify → create → save |
 | Decorative animation budget | — | ≤ 2 per explainer |
-| Bundled offline assets | — | 5 libs, ~320 KB |
+| Bundled offline assets | — | 8 libs, ~456 KB |
 
 ## Credits
 
@@ -53,6 +54,9 @@ The bundled assets (`assets/`) are copied into the workspace the first time an e
 |---|---|---|
 | [teach](https://github.com/mattpocock/teach) (original skill) | [Matt Pocock](https://github.com/mattpocock) | MIT |
 | [anime.js](https://animejs.com) | Julian Garnier | MIT |
+| [GSAP](https://gsap.com) + [gsap-skills](https://github.com/greensock/gsap-skills) | GreenSock / Webflow | MIT (free, all plugins) |
+| [shadcn/ui](https://ui.shadcn.com) | shadcn | MIT |
+| [tailwindcss-animate](https://github.com/jamiebuilds/tailwindcss-animate) | Jamie Kyle | MIT |
 | [Zdog](https://zzz.dog) | Dave DeSandro | MIT |
 | [animate.css](https://animate.style) | Daniel Eden | MIT |
 | [Magic CSS](https://www.minimamente.com/project/magic/) | Christian Pucci | MIT |

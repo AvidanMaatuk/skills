@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>shadcn/ui — dialog (discrete state, rich consequence)</title>
+<link rel="stylesheet" href="../assets/shadcn.css">
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { display: grid; place-items: center; background: hsl(240 6% 96%); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body class="ui">
+  <button class="ui-btn" onclick="openDlg()">Open dialog</button>
+
+  <div id="overlay" class="ui-overlay" hidden data-state="closed" onclick="closeDlg()"></div>
+  <div id="dialog" class="ui-dialog" hidden data-state="closed" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+    <h2 id="dlgTitle" class="ui-card__title" style="margin:0 0 .4rem">One flag, two worlds</h2>
+    <p class="ui-card__desc" style="margin:0 0 1.25rem">
+      A single boolean flips the scrim, the panel, focus, and scroll — discrete state with rich, coordinated consequence.
+    </p>
+    <div style="display:flex; gap:.5rem; justify-content:flex-end">
+      <button class="ui-btn ui-btn--ghost" onclick="closeDlg()">Cancel</button>
+      <button class="ui-btn" onclick="closeDlg()">Got it</button>
+    </div>
+  </div>
+
+  <script>
+    const overlay = document.getElementById("overlay");
+    const dialog = document.getElementById("dialog");
+
+    function openDlg() {
+      [overlay, dialog].forEach((el) => { el.hidden = false; el.dataset.state = "open"; });
+    }
+    function closeDlg() {
+      // set state to "closed" so the exit animation runs, then hide after it ends
+      [overlay, dialog].forEach((el) => (el.dataset.state = "closed"));
+      const done = () => [overlay, dialog].forEach((el) => (el.hidden = true));
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      reduce ? done() : dialog.addEventListener("animationend", done, { once: true });
+    }
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !dialog.hidden) closeDlg(); });
+  </script>
+</body>
+</html>

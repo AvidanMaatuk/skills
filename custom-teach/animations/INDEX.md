@@ -63,12 +63,23 @@ Every snippet in this directory is a single self-contained HTML file — no exte
 | 174-calendar.html | exercise | js | Live calendar that renders current month from `Date`; date logic playground |
 | 176-relationship-between-html-css-js.html | diagram | js | Interactive HTML/CSS/JS relationship explainer; layered web-stack model |
 | 178-tile-pattern-designer.html | exercise | js | Click-to-design tile pattern grid; user constructs, instant visual feedback |
+| gsap-timeline-pipeline-sequence.html | process | gsap | Stages light up in dependency order along a pipeline; sequential processing, ordered stages |
+| gsap-scroll-reveal-steps.html | process | gsap | Steps reveal (and reverse) as you scroll — scrollytelling; reader-paced sequence, accumulation |
+| gsap-svg-draw-build.html | diagram | gsap | SVG diagram draws itself node-by-node, edges between them; construction / build order of a structure |
+| gsap-stagger-grid-from-center.html | emphasis | gsap | Grid cells scale in staggered from the centre; reveal wave propagating from a source |
+| shadcn-accordion-progressive-disclosure.html | exercise | shadcn | Accordion opens one panel at a time; progressive disclosure, hierarchy, reveal-on-demand |
+| shadcn-card-stagger-reveal.html | emphasis | shadcn | Cards fade + slide in with staggered delay; grouped entrance, pacing a set of items |
+| shadcn-dialog-state.html | state | shadcn | Dialog + scrim open/close on one flag; discrete state with rich, coordinated consequences |
 
 ## Libraries available to new snippets
 
 New snippets may also use the bundled libraries in `../assets/` (copy the relevant file reference when embedding in a workspace explainer):
 
-- `anime.min.js` — timelines, staggering, SVG morphing; first choice for **created** JS animations
+- `anime.min.js` — timelines, staggering, SVG morphing; lightweight JS animations
+- `gsap.min.js` (+ `ScrollTrigger.min.js`) — runtime-controllable timelines, staggers, scroll-linked reveal, springy/elastic eases; first choice for **sequencing, scroll-driven, or controllable** JS animation. Read [`../references/gsap.md`](../references/gsap.md) before authoring.
 - `zdog.dist.min.js` — round, designer-friendly 3D models; first choice for **spatial** concepts
+- `shadcn.css` — shadcn/ui tokens + component surfaces (card, button, badge, accordion, dialog) + tailwindcss-animate enter/exit classes and the `data-state` pattern; first choice for **UI / interaction / discrete-state** concepts that want a clean modern surface. Read [`../references/shadcn.md`](../references/shadcn.md).
 - `animate.min.css` / `magic.min.css` — ready-made CSS entrance/attention classes for **emphasis**
 - `lottie_light.min.js` — plays downloaded `.json` Lottie files (playback only; store the `.json` next to the snippet and record it in this index)
+
+> GSAP and shadcn snippets reference their bundled library by relative path (`../assets/gsap.min.js`, `../assets/shadcn.css`) instead of inlining — see the packaging note in [ANIMATIONS-FORMAT.md](../ANIMATIONS-FORMAT.md).

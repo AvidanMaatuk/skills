@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>shadcn/ui — staggered card reveal</title>
+<link rel="stylesheet" href="../assets/shadcn.css">
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { display: grid; place-items: center; background: hsl(240 6% 96%); padding: 1.5rem; }
+  .deck { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); width: min(92vw, 560px); }
+  .replay { margin-top: 1.25rem; display: flex; justify-content: center; }
+</style>
+</head>
+<body class="ui">
+  <div>
+    <div class="deck ui-stagger" id="deck">
+      <div class="ui-card animate-in fade-in slide-in-from-bottom-8 duration-500">
+        <div class="ui-card__header"><div class="ui-card__title">Group</div></div>
+        <div class="ui-card__content"><span class="ui-badge ui-badge--secondary">related</span></div>
+      </div>
+      <div class="ui-card animate-in fade-in slide-in-from-bottom-8 duration-500">
+        <div class="ui-card__header"><div class="ui-card__title">Pace</div></div>
+        <div class="ui-card__content"><span class="ui-badge ui-badge--secondary">one by one</span></div>
+      </div>
+      <div class="ui-card animate-in fade-in slide-in-from-bottom-8 duration-500">
+        <div class="ui-card__header"><div class="ui-card__title">Reveal</div></div>
+        <div class="ui-card__content"><span class="ui-badge ui-badge--secondary">in order</span></div>
+      </div>
+    </div>
+    <div class="replay"><button class="ui-btn ui-btn--outline" onclick="replay()">Replay</button></div>
+  </div>
+
+  <script>
+    // .ui-stagger gives children incremental animation-delay; the entrance classes
+    // (fade-in + slide-in-from-bottom) supply the motion. Re-trigger by reflow.
+    function replay() {
+      const deck = document.getElementById("deck");
+      deck.querySelectorAll(".ui-card").forEach((c) => {
+        c.classList.remove("animate-in", "fade-in", "slide-in-from-bottom-8", "duration-500");
+        void c.offsetWidth;                       // force reflow so the animation restarts
+        c.classList.add("animate-in", "fade-in", "slide-in-from-bottom-8", "duration-500");
+      });
+    }
+  </script>
+</body>
+</html>

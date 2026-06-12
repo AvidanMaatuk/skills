@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSAP — staggered grid from center</title>
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { display: grid; place-items: center; background: #0f1115; }
+  .grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 8px; }
+  .cell { width: 26px; height: 26px; border-radius: 7px; background: #5b8cff; }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+
+  <script src="../assets/gsap.min.js"></script>
+  <script>
+    // stagger {from:"center", grid:"auto"} propagates the wave outward from the
+    // middle — the offset itself teaches "spreading from a source".
+    const grid = document.querySelector(".grid");
+    for (let i = 0; i < 11 * 7; i++) grid.appendChild(Object.assign(document.createElement("div"), { className: "cell" }));
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    gsap.set(".cell", { scale: 0, autoAlpha: 0 });
+    gsap.to(".cell", {
+      scale: 1, autoAlpha: 1, duration: reduce ? 0 : 0.5, ease: "back.out(2)",
+      stagger: reduce ? 0 : { each: 0.045, grid: "auto", from: "center" },
+      repeat: -1, repeatDelay: 1.1, yoyo: true
+    });
+  </script>
+</body>
+</html>

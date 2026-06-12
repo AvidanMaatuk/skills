@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>shadcn/ui — accordion (progressive disclosure)</title>
+<link rel="stylesheet" href="../assets/shadcn.css">
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { display: grid; place-items: center; background: hsl(240 6% 96%); padding: 1.5rem; }
+  .wrap { width: min(92vw, 460px); }
+  .lead { font-size: .85rem; color: hsl(var(--muted-foreground)); margin: 0 0 .75rem; }
+</style>
+</head>
+<body class="ui">
+  <div class="wrap">
+    <p class="lead">Reveal one layer at a time — detail stays hidden until asked for.</p>
+    <div class="ui-accordion">
+      <div class="ui-accordion__item">
+        <button class="ui-accordion__trigger" data-state="open" onclick="toggle(this)">
+          What is progressive disclosure?
+          <span class="ui-accordion__chevron">▾</span>
+        </button>
+        <div class="ui-accordion__content" data-state="open"><div><div>
+          Show the headline; defer the depth. The reader controls how much detail to pull in, so the surface stays calm.
+        </div></div></div>
+      </div>
+      <div class="ui-accordion__item">
+        <button class="ui-accordion__trigger" data-state="closed" onclick="toggle(this)">
+          Why animate the open/close?
+          <span class="ui-accordion__chevron">▾</span>
+        </button>
+        <div class="ui-accordion__content" data-state="closed"><div><div>
+          The height transition shows where the new content came from, preserving the reader's sense of place in the hierarchy.
+        </div></div></div>
+      </div>
+      <div class="ui-accordion__item">
+        <button class="ui-accordion__trigger" data-state="closed" onclick="toggle(this)">
+          How does it work here?
+          <span class="ui-accordion__chevron">▾</span>
+        </button>
+        <div class="ui-accordion__content" data-state="closed"><div><div>
+          A <code>data-state</code> flip drives a CSS <code>grid-template-rows: 0fr → 1fr</code> transition — no measuring JS, honours reduced-motion.
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggle(btn) {
+      const next = btn.dataset.state === "open" ? "closed" : "open";
+      btn.dataset.state = next;
+      btn.nextElementSibling.dataset.state = next;
+    }
+  </script>
+</body>
+</html>

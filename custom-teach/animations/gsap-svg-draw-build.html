@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSAP — SVG self-drawing diagram</title>
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { display: grid; place-items: center; background: #0f1115; }
+  svg { width: min(80vw, 460px); height: auto; }
+  .edge { fill: none; stroke: #5b8cff; stroke-width: 3; stroke-linecap: round; }
+  .node { fill: #10241d; stroke: #7af0c8; stroke-width: 2.5; }
+  .label { fill: #e7eaf0; font: 600 14px ui-sans-serif, system-ui, sans-serif; text-anchor: middle; }
+</style>
+</head>
+<body>
+  <!-- A diagram that draws itself in build order: nodes pop, edges draw between them. -->
+  <svg viewBox="0 0 400 240">
+    <path class="edge" d="M80,60 L200,60"  />
+    <path class="edge" d="M200,60 L200,170" />
+    <path class="edge" d="M200,170 L320,170" />
+    <g class="node-g"><circle class="node" cx="80"  cy="60"  r="26"/><text class="label" x="80"  y="65">A</text></g>
+    <g class="node-g"><circle class="node" cx="200" cy="60"  r="26"/><text class="label" x="200" y="65">B</text></g>
+    <g class="node-g"><circle class="node" cx="200" cy="170" r="26"/><text class="label" x="200" y="175">C</text></g>
+    <g class="node-g"><circle class="node" cx="320" cy="170" r="26"/><text class="label" x="320" y="175">D</text></g>
+  </svg>
+
+  <script src="../assets/gsap.min.js"></script>
+  <script>
+    // strokeDashoffset trick: set dash = path length, animate offset → 0 to "draw" it.
+    const edges = gsap.utils.toArray(".edge");
+    edges.forEach((p) => { const len = p.getTotalLength(); gsap.set(p, { strokeDasharray: len, strokeDashoffset: len }); });
+    const nodes = gsap.utils.toArray(".node-g");
+    gsap.set(nodes, { transformOrigin: "center", scale: 0, autoAlpha: 0 });
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.2, defaults: { ease: "power2.out" } });
+    // node A appears, then for each edge: draw it, then reveal the node it points to
+    tl.to(nodes[0], { scale: 1, autoAlpha: 1, duration: 0.4, ease: "back.out(1.7)" });
+    edges.forEach((edge, i) => {
+      tl.to(edge, { strokeDashoffset: 0, duration: 0.5 })
+        .to(nodes[i + 1], { scale: 1, autoAlpha: 1, duration: 0.4, ease: "back.out(1.7)" }, "-=0.1");
+    });
+    tl.to(".node-g, .edge", { autoAlpha: 0, duration: 0.5 }, "+=0.9");
+    if (reduce) tl.progress(0.6).pause();
+  </script>
+</body>
+</html>

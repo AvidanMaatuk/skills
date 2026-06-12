@@ -86,19 +86,33 @@ Animate the concept, not the page. An animation earns its place in an explainer 
 
 Map the concept to the technique:
 
-- **Process / sequence / accumulation** → step-through or timeline animation (`anime.js`)
+- **Process / sequence / accumulation** → timeline animation. Use `gsap` (timelines, precise position control) for multi-step choreography; `anime.js` for lighter cases.
+- **Scroll-driven / reveal-as-you-read / pin-and-explain** → `gsap` + `ScrollTrigger` (scrollytelling: ties the reveal to the reader's position).
 - **Spatial structure / 3D / mechanical models** → `zdog`
-- **Discrete state change** → CSS transitions
-- **Emphasis on a key term or moment** → `animate.css` / `magic.css` classes, sparingly
+- **Discrete state change** → CSS transitions; for **UI / interactive / component** concepts (toggles, accordions, dialogs, staggered card reveals) on a clean modern surface, use `shadcn` (`shadcn.css` tokens + tailwindcss-animate classes + the `data-state` pattern).
+- **Emphasis on a key term or moment** → `animate.css` / `magic.css` classes, or a `gsap` stagger / springy ease, sparingly
 - **Reward on exercise success, session hooks** → library `reward` / `hook` snippets, or a downloaded Lottie `.json` (playback only - never hand-author Lottie JSON)
 
+When creating a `gsap` or `shadcn` animation, read the matching cheatsheet in [`references/`](./references/) first (`references/gsap.md`, `references/shadcn.md`) — it carries the correct API and do/don't list so the animation integrates correctly on the first pass. Always honour `prefers-reduced-motion`.
+
 Hard budget: at most **2 decorative animations** (emphasis/reward) per explainer. Conceptual animations are limited only by whether each one teaches.
+
+## Cool Explainer Format (opt-in)
+
+There is a bolder, signature explainer style available: a single self-contained HTML lesson with a boot-up intro, neon blueprint surface, scroll-staged sections, hand-built interactive simulations, and a self-scoring quiz. The full spec and a working starter skeleton are in [COOL-EXPLAINER-FORMAT.md](./COOL-EXPLAINER-FORMAT.md) and [cool-explainer-template.html](./cool-explainer-template.html).
+
+**Use it only when the user explicitly asks for it** — "make it cool", "the cool format", "cool explainer", "do it in the cool style", or similar. It is never the silent default; default explainers follow the guidance above. When the user does ask:
+
+- Read [COOL-EXPLAINER-FORMAT.md](./COOL-EXPLAINER-FORMAT.md) and **follow it precisely** — start from `cool-explainer-template.html`, copy it into the workspace, reskin the `:root` tokens and fonts to the topic, and replace the stages.
+- Keep the skill's pedagogy intact: mission-grounded, `GLOSSARY.md`-true, citation-backed, tied to the zone of proximal development. The cool format changes the *delivery*, not the teaching.
+- Treat the choice as **sticky for the workspace**: once asked, later explainers in that topic keep the format. Note it in `CURRICULUM.md` so future sessions stay consistent.
+- Run the format's pre-ship checklist before handing the explainer over.
 
 For every animation, walk the reuse ladder defined in ANIMATIONS-FORMAT.md: search `animations/INDEX.md` first, reuse if a snippet fits, modify if one is close, create only when nothing exists - and **save anything created or meaningfully modified back to the skill's `animations/` directory with an INDEX.md entry**. The library compounds across topics; an unsaved animation is a wasted one.
 
 ### Asset wiring
 
-The first time you generate an explainer in a workspace, copy the skill's `assets/` directory into the workspace (`./assets/`). Explainers reference these files by relative path (e.g. `<script src="./assets/anime.min.js">`), so the workspace stays self-contained, works offline, and can be shared. The bundled libraries: `anime.min.js`, `zdog.dist.min.js`, `lottie_light.min.js`, `animate.min.css`, `magic.min.css`.
+The first time you generate an explainer in a workspace, copy the skill's `assets/` directory into the workspace (`./assets/`). Explainers reference these files by relative path (e.g. `<script src="./assets/anime.min.js">`), so the workspace stays self-contained, works offline, and can be shared. The bundled libraries: `anime.min.js`, `gsap.min.js`, `ScrollTrigger.min.js`, `zdog.dist.min.js`, `lottie_light.min.js`, `animate.min.css`, `magic.min.css`, `shadcn.css`. (Seeded `gsap`/`shadcn` snippets reference `../assets/...`; when embedding one into an explainer, rewrite the path to `./assets/...`.)
 
 ## Acquiring Skills
 
